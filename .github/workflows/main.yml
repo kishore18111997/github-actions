@@ -33,12 +33,12 @@ jobs:
 
     - name: Execute Run Command
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+        PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        HOSTNAME: ${{secrets.IP}}
+        USER_NAME: ${{secrets.U_NAME}}
       run: |
-        aws ssm send-command \
-          --document-name "AWS-RunShellScript" \
-          --targets "Key=instanceids,Values=i-0804df08a3b46646c" \
-          --parameters '{"commands":["./up.sh"]}' \
-          --output text
+        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME}  '
+              ls
+              '
+          
