@@ -31,12 +31,14 @@ jobs:
       run: |
         aws ec2 start-instances --instance-ids i-0804df08a3b46646c
 
-    - name: SSH into EC2 instance and run shell script
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.IP }}
-        username: ${{ secrets.U_NAME }}
-        key: ${{ secrets.PRIVATE_KEY }}
-        port: 22
-        script: |
-          ls
+    - name: Execute Run Command
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: 'your-region'  # Replace 'your-region' with your AWS region
+      run: |
+        aws ssm send-command \
+          --document-name "AWS-RunShellScript" \
+          --targets "Key=instanceids,Values=i-0804df08a3b46646c" \
+          --parameters '{"commands":["./up.sh"]}' \
+          --output text
