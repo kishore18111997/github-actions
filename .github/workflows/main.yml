@@ -1,0 +1,28 @@
+name: Manual Trigger Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Install Python and AWS CLI
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+        aws-cli: true
+
+    - name: Configure AWS CLI
+      run: |
+        aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+        aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+        aws configure set default.region $AWS_DEFAULT_REGION
+
+    - name: Turn on EC2 instance
+      run: |
+        aws ec2 start-instances --instance-ids i-0804df08a3b46646c
