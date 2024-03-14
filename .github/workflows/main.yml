@@ -23,4 +23,9 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: 'your-region' # Replace 'your-region' with your AWS region
       run: |
+        aws configure
+        $AWS_ACCESS_KEY_ID
+        $AWS_SECRET_ACCESS_KEY
+        $AWS_DEFAULT_REGION
+        json
         aws ec2 start-instances --instance-ids i-0804df08a3b46646c
