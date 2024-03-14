@@ -30,3 +30,13 @@ jobs:
     - name: Turn on EC2 instance
       run: |
         aws ec2 start-instances --instance-ids i-0804df08a3b46646c
+
+    - name: SSH into EC2 instance and run shell script
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.IP }}
+        username: ${{ secrets.U_NAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: 22
+        script: |
+          ./up.sh
