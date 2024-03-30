@@ -39,23 +39,6 @@ jobs:
             exit 0
         fi
 
-    - name: Send Slack notification
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      run: |
-        curl -X POST -H 'Content-type: application/json' --data "{'text':'Github actions triggered'}" ${SLACK_WEBHOOK_URL}
-
-    - name: Execute Run Command
-      env:
-        PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-        HOSTNAME: ${{secrets.IP}}
-        USER_NAME: ${{secrets.U_NAME}}
-      run: |
-        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME}  '
-              ./down.sh
-              '
-
     - name: Turn on EC2 instance
       run: |
         aws ec2 start-instances --instance-ids i-0804df08a3b46646c
