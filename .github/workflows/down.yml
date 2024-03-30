@@ -31,6 +31,7 @@ jobs:
         aws configure set default.region $AWS_DEFAULT_REGION
 
     - name: Check EC2 instance state
+      id: check_ec2_instance_state
       run: |
         instance_state=$(aws ec2 describe-instances --instance-ids i-058320b50ee9e56de --query 'Reservations[*].Instances[*].State.Name' --output text)
         echo "Instance state: $instance_state"
@@ -42,6 +43,6 @@ jobs:
         fi
 
     - name: Turn on EC2 instance
-      if: steps.check_backend_state.outputs.skip != 'true'
+      if: steps.check_ec2_instance_state.outputs.skip != 'true'
       run: |
         aws ec2 stop-instances --instance-ids i-0804df08a3b46646c
