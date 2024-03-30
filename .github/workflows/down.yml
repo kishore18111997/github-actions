@@ -36,9 +36,12 @@ jobs:
         echo "Instance state: $instance_state"
         if [ "$instance_state" = "stopped" ]; then
             echo "EC2 instance is in stopped state. Skipping the workflow."
-            exit 1
+            echo "::set-output name=skip::true"
+        else
+            echo "::set-output name=skip::false"
         fi
 
     - name: Turn on EC2 instance
+      if: steps.check_backend_state.outputs.skip != 'true'
       run: |
         aws ec2 start-instances --instance-ids i-0804df08a3b46646c
