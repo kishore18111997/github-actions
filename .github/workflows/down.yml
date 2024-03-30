@@ -14,12 +14,6 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Send Slack notification
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      run: |
-        curl -X POST -H 'Content-type: application/json' --data "{'text':'Github actions triggered'}" ${SLACK_WEBHOOK_URL}
-
     - name: Install Python and AWS CLI
       uses: actions/setup-python@v2
       with:
@@ -35,6 +29,21 @@ jobs:
         aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
         aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
         aws configure set default.region $AWS_DEFAULT_REGION
+
+    - name: Check EC2 instance state
+      run: |
+        instance_state=$(aws ec2 describe-instance-status --instance-ids i-058320b50ee9e56de --query 'InstanceStatuses[*].InstanceState.Name' --output text)
+        echo "jenkins_server status: $instance_state"
+        if [ "$instance_state" = "stopped" ]; then
+            echo "EC2 instance is in stopped state. Skipping the workflow."
+            exit 0
+        fi
+
+    - name: Send Slack notification
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      run: |
+        curl -X POST -H 'Content-type: application/json' --data "{'text':'Github actions triggered'}" ${SLACK_WEBHOOK_URL}
 
     - name: Execute Run Command
       env:
