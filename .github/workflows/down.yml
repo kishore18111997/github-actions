@@ -33,6 +33,7 @@ jobs:
     - name: Check EC2 instance state
       run: |
         instance_state=$(aws ec2 describe-instances --instance-ids i-058320b50ee9e56de --query 'Reservations[*].Instances[*].State.Name' --output text)
+        echo "Instance state: $instance_state"
         if [ "$instance_state" = "stopped" ]; then
             echo "EC2 instance is in stopped state. Skipping the workflow."
             exit 0
