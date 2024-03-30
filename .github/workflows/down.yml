@@ -42,6 +42,6 @@ jobs:
         fi
 
     - name: Turn on EC2 instance
-      if: steps.check_backend_state.outputs.skip == 'false'
+      if: steps.check_backend_state.outputs.skip != 'true'
       run: |
         aws ec2 stop-instances --instance-ids i-0804df08a3b46646c
