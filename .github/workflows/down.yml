@@ -36,7 +36,7 @@ jobs:
         echo "Instance state: $instance_state"
         if [ "$instance_state" = "stopped" ]; then
             echo "EC2 instance is in stopped state. Skipping the workflow."
-            exit 0
+            exit 1
         fi
 
     - name: Turn on EC2 instance
