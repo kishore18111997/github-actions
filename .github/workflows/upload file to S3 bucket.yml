@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Check the working directory
+      run: pwd
+    
     - name: Upload file to S3 bucket
       uses: jakejarvis/s3-sync-action@v0.5.1
       with:
