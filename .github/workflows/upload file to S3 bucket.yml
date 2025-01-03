@@ -12,9 +12,9 @@ jobs:
       uses: jakejarvis/s3-sync-action@v0.5.1
       with:
         args: --acl public-read
-        source_dir: .github/workflows/blank.yml
-        dest_dir: test-folder
       env:
         AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        SOURCE_DIR: .github/workflows/
+        DEST_DIR: test-folder/
