@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
     - name: Check the working directory
       run: pwd
     
@@ -19,5 +22,5 @@ jobs:
         AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        SOURCE_DIR: /home/runner/work/github-actions/github-actions/
+        SOURCE_DIR: ./github/workflows
         DEST_DIR: test-folder/
