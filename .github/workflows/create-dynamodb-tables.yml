@@ -25,7 +25,6 @@ jobs:
         run: |
           echo "Deploying for environment: $Environment"
           TABLES=("decoded_vin_${Environment}" "otolane_geopoint_distance_${Environment}" "transport_quote_${Environment}" "vin_req_count_${Environment}")
-          echo "TABLES NAME: $TABLES"
           EXISTING_TABLES=$(aws dynamodb list-tables --query "TableNames" --output json)
 
           for TABLE in "${TABLES[@]}"; do
@@ -35,9 +34,6 @@ jobs:
               echo "${TABLE}_EXISTS=false" >> $GITHUB_ENV
             fi
           done
-
-      - name: check current path
-        run: pwd && ls
       
       - name: Deploy CloudFormation Stack
         run: |
@@ -45,11 +41,6 @@ jobs:
           GeoPointDistanceTableExists=$(printenv "otolane_geopoint_distance_${Environment}_EXISTS")
           TransportQuoteTableExists=$(printenv "transport_quote_${Environment}_EXISTS")
           VinReqCountTableExists=$(printenv "vin_req_count_${Environment}_EXISTS")
-
-          echo "DecodedVinTableExists: $DecodedVinTableExists"
-          echo "GeoPointDistanceTableExists: $GeoPointDistanceTableExists"
-          echo "TransportQuoteTableExists: $TransportQuoteTableExists"
-          echo "VinReqCountTableExists: $VinReqCountTableExists"
 
           aws cloudformation deploy \
             --stack-name dynamodb-tables-${Environment} \
