@@ -42,12 +42,12 @@ jobs:
       - name: Deploy CloudFormation Stack
         run: |
           aws cloudformation deploy \
-            --stack-name dynamodb-tables \
+            --stack-name dynamodb-tables-${Environment} \
             --template-file workflows/cloudformation.yml \
             --parameter-overrides \
-              Environment=uat \
-              DecodedVinTableExists=$DECODED_VIN_UAT_EXISTS \
-              GeoPointDistanceTableExists=$OTOLANE_GEOPOINT_DISTANCE_UAT_EXISTS \
-              TransportQuoteTableExists=$TRANSPORT_QUOTE_UAT_EXISTS \
-              VinReqCountTableExists=$VIN_REQ_COUNT_UAT_EXISTS \
+              Environment=${Environment} \
+              DecodedVinTableExists=${DECODED_VIN_${Environment}_EXISTS} \
+              GeoPointDistanceTableExists=${OTOLANE_GEOPOINT_DISTANCE_${Environment}_EXISTS} \
+              TransportQuoteTableExists=${TRANSPORT_QUOTE_${Environment}_EXISTS} \
+              VinReqCountTableExists=${VIN_REQ_COUNT_${Environment}_EXISTS} \
             --capabilities CAPABILITY_NAMED_IAM
