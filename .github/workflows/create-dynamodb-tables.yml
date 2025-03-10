@@ -37,6 +37,7 @@ jobs:
             fi
           done
           echo "ANY_TABLE_MISSING=$ANY_TABLE_MISSING" >> $GITHUB_ENV
+          echo "ANY_TABLE_MISSING set to: $ANY_TABLE_MISSING"
       
       - name: Deploy CloudFormation Stack
         if: env.ANY_TABLE_MISSING == 'true'
