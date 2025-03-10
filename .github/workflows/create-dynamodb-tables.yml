@@ -1,0 +1,47 @@
+name: Deploy DynamoDB Tables
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1 # Change this to your AWS region
+
+      - name: Check Existing DynamoDB Tables
+        id: check_tables
+        run: |
+          TABLES=("decoded_vin_uat" "otolane_geopoint_distance_uat" "transport_quote_uat" "vin_req_count_uat")
+          EXISTING_TABLES=$(aws dynamodb list-tables --query "TableNames" --output json)
+
+          for TABLE in "${TABLES[@]}"; do
+            if echo "$EXISTING_TABLES" | grep -q "$TABLE"; then
+              echo "${TABLE^^}_EXISTS=true" >> $GITHUB_ENV
+            else
+              echo "${TABLE^^}_EXISTS=false" >> $GITHUB_ENV
+            fi
+          done
+
+      - name: Deploy CloudFormation Stack
+        run: |
+          aws cloudformation deploy \
+            --stack-name dynamodb-tables \
+            --template-file cloudformation.yaml \
+            --parameter-overrides \
+              Environment=uat \
+              DecodedVinTableExists=$DECODED_VIN_UAT_EXISTS \
+              GeoPointDistanceTableExists=$OTOLANE_GEOPOINT_DISTANCE_UAT_EXISTS \
+              TransportQuoteTableExists=$TRANSPORT_QUOTE_UAT_EXISTS \
+              VinReqCountTableExists=$VIN_REQ_COUNT_UAT_EXISTS \
+            --capabilities CAPABILITY_NAMED_IAM
