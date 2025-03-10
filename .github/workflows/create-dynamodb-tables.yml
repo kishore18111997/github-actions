@@ -55,6 +55,7 @@ jobs:
       
       - name: Deploy CloudFormation Stack
         if: env.ANY_TABLE_MISSING == 'true'
+        run: 
          aws cloudformation deploy \
             --stack-name dynamodb-tables-${Environment} \
             --template-file workflows/cloudformation.yml \
