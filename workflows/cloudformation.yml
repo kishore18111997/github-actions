@@ -1,1 +1,103 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to create missing DynamoDB tables for prod or uat environments.
+
+Parameters:
+  Environment:
+    Type: String
+    AllowedValues: 
+      - prod
+      - uat
+    Default: uat
+    Description: The environment to deploy the DynamoDB tables for (prod or uat)
+
+Conditions:
+  CreateDecodedVinTable: !Equals [!Ref DecodedVinTableExists, "false"]
+  CreateGeoPointDistanceTable: !Equals [!Ref GeoPointDistanceTableExists, "false"]
+  CreateTransportQuoteTable: !Equals [!Ref TransportQuoteTableExists, "false"]
+  CreateVinReqCountTable: !Equals [!Ref VinReqCountTableExists, "false"]
+
+Parameters:
+  DecodedVinTableExists:
+    Type: String
+    Default: "false"
+  GeoPointDistanceTableExists:
+    Type: String
+    Default: "false"
+  TransportQuoteTableExists:
+    Type: String
+    Default: "false"
+  VinReqCountTableExists:
+    Type: String
+    Default: "false"
+
+Resources:
+  DecodedVinTable:
+    Type: "AWS::DynamoDB::Table"
+    Condition: CreateDecodedVinTable
+    Properties:
+      TableName: !Sub "decoded_vin_${Environment}"
+      AttributeDefinitions:
+        - AttributeName: "vin"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "vin"
+          KeyType: "HASH"
+      BillingMode: "PAY_PER_REQUEST"
+      TimeToLiveSpecification:
+        AttributeName: "TTL"
+        Enabled: true
+      SSESpecification:
+        SSEEnabled: true
+      DeletionProtectionEnabled: true
+
+  GeoPointDistanceTable:
+    Type: "AWS::DynamoDB::Table"
+    Condition: CreateGeoPointDistanceTable
+    Properties:
+      TableName: !Sub "otolane_geopoint_distance_${Environment}"
+      AttributeDefinitions:
+        - AttributeName: "address_hash"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "address_hash"
+          KeyType: "HASH"
+      BillingMode: "PAY_PER_REQUEST"
+      SSESpecification:
+        SSEEnabled: true
+      DeletionProtectionEnabled: true
+
+  TransportQuoteTable:
+    Type: "AWS::DynamoDB::Table"
+    Condition: CreateTransportQuoteTable
+    Properties:
+      TableName: !Sub "transport_quote_${Environment}"
+      AttributeDefinitions:
+        - AttributeName: "address_hash"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "address_hash"
+          KeyType: "HASH"
+      BillingMode: "PAY_PER_REQUEST"
+      SSESpecification:
+        SSEEnabled: true
+      DeletionProtectionEnabled: true
+
+  VinReqCountTable:
+    Type: "AWS::DynamoDB::Table"
+    Condition: CreateVinReqCountTable
+    Properties:
+      TableName: !Sub "vin_req_count_${Environment}"
+      AttributeDefinitions:
+        - AttributeName: "dealer_id"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "dealer_id"
+          KeyType: "HASH"
+      BillingMode: "PAY_PER_REQUEST"
+      TimeToLiveSpecification:
+        AttributeName: "TTL"
+        Enabled: true
+      SSESpecification:
+        SSEEnabled: true
+      DeletionProtectionEnabled: true
 
