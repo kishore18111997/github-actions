@@ -30,9 +30,9 @@ jobs:
 
           for TABLE in "${TABLES[@]}"; do
             if echo "$EXISTING_TABLES" | grep -q "$TABLE"; then
-              echo "${TABLE^^}_EXISTS=true" >> $GITHUB_ENV
+              echo "${TABLE}_EXISTS=true" >> $GITHUB_ENV
             else
-              echo "${TABLE^^}_EXISTS=false" >> $GITHUB_ENV
+              echo "${TABLE}_EXISTS=false" >> $GITHUB_ENV
             fi
           done
 
