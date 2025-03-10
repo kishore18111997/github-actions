@@ -46,8 +46,8 @@ jobs:
             --template-file workflows/cloudformation.yml \
             --parameter-overrides \
               Environment=${Environment} \
-              DecodedVinTableExists=${DECODED_VIN_${Environment}_EXISTS} \
-              GeoPointDistanceTableExists=${OTOLANE_GEOPOINT_DISTANCE_${Environment}_EXISTS} \
-              TransportQuoteTableExists=${TRANSPORT_QUOTE_${Environment}_EXISTS} \
-              VinReqCountTableExists=${VIN_REQ_COUNT_${Environment}_EXISTS} \
+              DecodedVinTableExists=${decoded_vin_${Environment}_EXISTS} \
+              GeoPointDistanceTableExists=${otolane_geopoint_distance_${Environment}_EXISTS} \
+              TransportQuoteTableExists=${transport_quote_${Environment}_EXISTS} \
+              VinReqCountTableExists=${vin_req_count_${Environment}_EXISTS} \
             --capabilities CAPABILITY_NAMED_IAM
