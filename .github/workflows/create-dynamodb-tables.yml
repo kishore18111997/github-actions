@@ -55,27 +55,13 @@ jobs:
       
       - name: Deploy CloudFormation Stack
         if: env.ANY_TABLE_MISSING == 'true'
-        id: deploy_cf
-        uses: aws-actions/aws-cloudformation-github-deploy@master
-        with:
-          name: dynamodb-tables-${{ env.Environment }}
-          template: workflows/cloudformation.yml
-          no-fail-on-empty-changeset: "1"
-          parameter-overrides: >-
-            Environment=${{ env.Environment }},
-            DecodedVinTableExists=$DecodedVinTableExists,
-            GeoPointDistanceTableExists=$GeoPointDistanceTableExists,
-            TransportQuoteTableExists=$TransportQuoteTableExists,
-            VinReqCountTableExists=$VinReqCountTableExists
-          
-
-          #aws cloudformation deploy \
-           # --stack-name dynamodb-tables-${Environment} \
-           # --template-file workflows/cloudformation.yml \
-           # --parameter-overrides \
-           #   Environment=${Environment} \
-           #   DecodedVinTableExists=$DecodedVinTableExists \
-           #   GeoPointDistanceTableExists=$GeoPointDistanceTableExists \
-           #   TransportQuoteTableExists=$TransportQuoteTableExists \
-           #   VinReqCountTableExists=$VinReqCountTableExists \
-           # --capabilities CAPABILITY_NAMED_IAM
+         aws cloudformation deploy \
+            --stack-name dynamodb-tables-${Environment} \
+            --template-file workflows/cloudformation.yml \
+            --parameter-overrides \
+              Environment=${Environment} \
+              DecodedVinTableExists=$DecodedVinTableExists \
+              GeoPointDistanceTableExists=$GeoPointDistanceTableExists \
+              TransportQuoteTableExists=$TransportQuoteTableExists \
+              VinReqCountTableExists=$VinReqCountTableExists \
+            --capabilities CAPABILITY_NAMED_IAM
