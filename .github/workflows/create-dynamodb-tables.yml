@@ -33,7 +33,7 @@ jobs:
               echo "${TABLE}_EXISTS=true" >> $GITHUB_ENV
             else
               echo "${TABLE}_EXISTS=false" >> $GITHUB_ENV
-              ANY_TABLE_MISSING=true
+              ANY_TABLE_MISSING=true >> $GITHUB_ENV
             fi
           done
           echo "ANY_TABLE_MISSING=$ANY_TABLE_MISSING" >> $GITHUB_ENV
