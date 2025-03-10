@@ -38,7 +38,7 @@ jobs:
         run: |
           aws cloudformation deploy \
             --stack-name dynamodb-tables \
-            --template-file ./cloudformation.yaml \
+            --template-file workflows/cloudformation.yml \
             --parameter-overrides \
               Environment=uat \
               DecodedVinTableExists=$DECODED_VIN_UAT_EXISTS \
