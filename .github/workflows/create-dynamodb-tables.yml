@@ -42,7 +42,8 @@ jobs:
           echo "ANY_TABLE_MISSING=$ANY_TABLE_MISSING" >> $GITHUB_ENV
           echo "ANY_TABLE_MISSING set to: $ANY_TABLE_MISSING"
       
-      - name: Setup DynamoDB table parameters
+      - name: Deploy CloudFormation Stack
+        if: env.ANY_TABLE_MISSING == 'true'
         run: |
           DecodedVinTableExists=$(printenv "decoded_vin_${Environment}_EXISTS")
           GeoPointDistanceTableExists=$(printenv "otolane_geopoint_distance_${Environment}_EXISTS")
@@ -52,11 +53,7 @@ jobs:
           echo $GeoPointDistanceTableExists
           echo $TransportQuoteTableExists
           echo $VinReqCountTableExists
-      
-      - name: Deploy CloudFormation Stack
-        if: env.ANY_TABLE_MISSING == 'true'
-        run: 
-         aws cloudformation deploy \
+          aws cloudformation deploy \
             --stack-name dynamodb-tables-${Environment} \
             --template-file workflows/cloudformation.yml \
             --parameter-overrides \
