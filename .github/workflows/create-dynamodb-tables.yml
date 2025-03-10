@@ -48,6 +48,10 @@ jobs:
           GeoPointDistanceTableExists=$(printenv "otolane_geopoint_distance_${Environment}_EXISTS")
           TransportQuoteTableExists=$(printenv "transport_quote_${Environment}_EXISTS")
           VinReqCountTableExists=$(printenv "vin_req_count_${Environment}_EXISTS")
+          echo $DecodedVinTableExists
+          echo $GeoPointDistanceTableExists
+          echo $TransportQuoteTableExists
+          echo $VinReqCountTableExists
       
       - name: Deploy CloudFormation Stack
         if: env.ANY_TABLE_MISSING == 'true'
