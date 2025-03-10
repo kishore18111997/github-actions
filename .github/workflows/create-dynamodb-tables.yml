@@ -3,6 +3,9 @@ name: Deploy DynamoDB Tables
 on:
   workflow_dispatch:
 
+env:
+  Environment: ${{ github.ref == 'refs/heads/main' && 'prod' || 'uat' }}
+
 jobs:
   check-and-deploy:
     runs-on: ubuntu-latest
