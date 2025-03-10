@@ -26,16 +26,20 @@ jobs:
           echo "Deploying for environment: $Environment"
           TABLES=("decoded_vin_${Environment}" "otolane_geopoint_distance_${Environment}" "transport_quote_${Environment}" "vin_req_count_${Environment}")
           EXISTING_TABLES=$(aws dynamodb list-tables --query "TableNames" --output json)
+          ANY_TABLE_MISSING=false
 
           for TABLE in "${TABLES[@]}"; do
             if echo "$EXISTING_TABLES" | grep -q "$TABLE"; then
               echo "${TABLE}_EXISTS=true" >> $GITHUB_ENV
             else
               echo "${TABLE}_EXISTS=false" >> $GITHUB_ENV
+              ANY_TABLE_MISSING=true
             fi
           done
+          echo "ANY_TABLE_MISSING=$ANY_TABLE_MISSING" >> $GITHUB_ENV
       
       - name: Deploy CloudFormation Stack
+        if: env.ANY_TABLE_MISSING == 'true'
         run: |
           DecodedVinTableExists=$(printenv "decoded_vin_${Environment}_EXISTS")
           GeoPointDistanceTableExists=$(printenv "otolane_geopoint_distance_${Environment}_EXISTS")
