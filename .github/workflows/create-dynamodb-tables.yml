@@ -23,7 +23,7 @@ jobs:
       - name: Check Existing DynamoDB Tables
         id: check_tables
         run: |
-          TABLES=("decoded_vin_uat" "otolane_geopoint_distance_uat" "transport_quote_uat" "vin_req_count_uat")
+          TABLES=("decoded_vin_${ENVIRONMENT}" "otolane_geopoint_distance_${ENVIRONMENT}" "transport_quote_${ENVIRONMENT}" "vin_req_count_${ENVIRONMENT}")
           EXISTING_TABLES=$(aws dynamodb list-tables --query "TableNames" --output json)
 
           for TABLE in "${TABLES[@]}"; do
