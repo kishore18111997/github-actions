@@ -41,13 +41,23 @@ jobs:
       
       - name: Deploy CloudFormation Stack
         run: |
+          DecodedVinTableExists=$(printenv "decoded_vin_${Environment}_EXISTS")
+          GeoPointDistanceTableExists=$(printenv "otolane_geopoint_distance_${Environment}_EXISTS")
+          TransportQuoteTableExists=$(printenv "transport_quote_${Environment}_EXISTS")
+          VinReqCountTableExists=$(printenv "vin_req_count_${Environment}_EXISTS")
+
+          echo "DecodedVinTableExists: $DecodedVinTableExists"
+          echo "GeoPointDistanceTableExists: $GeoPointDistanceTableExists"
+          echo "TransportQuoteTableExists: $TransportQuoteTableExists"
+          echo "VinReqCountTableExists: $VinReqCountTableExists"
+
           aws cloudformation deploy \
             --stack-name dynamodb-tables-${Environment} \
             --template-file workflows/cloudformation.yml \
             --parameter-overrides \
               Environment=${Environment} \
-              DecodedVinTableExists=${decoded_vin_${Environment}_EXISTS} \
-              GeoPointDistanceTableExists=${otolane_geopoint_distance_${Environment}_EXISTS} \
-              TransportQuoteTableExists=${transport_quote_${Environment}_EXISTS} \
-              VinReqCountTableExists=${vin_req_count_${Environment}_EXISTS} \
+              DecodedVinTableExists=$DecodedVinTableExists \
+              GeoPointDistanceTableExists=$GeoPointDistanceTableExists \
+              TransportQuoteTableExists=$TransportQuoteTableExists \
+              VinReqCountTableExists=$VinReqCountTableExists \
             --capabilities CAPABILITY_NAMED_IAM
