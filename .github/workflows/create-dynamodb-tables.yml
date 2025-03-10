@@ -25,6 +25,7 @@ jobs:
         run: |
           echo "Deploying for environment: $Environment"
           TABLES=("decoded_vin_${Environment}" "otolane_geopoint_distance_${Environment}" "transport_quote_${Environment}" "vin_req_count_${Environment}")
+          echo "TABLES NAME: $TABLES"
           EXISTING_TABLES=$(aws dynamodb list-tables --query "TableNames" --output json)
 
           for TABLE in "${TABLES[@]}"; do
