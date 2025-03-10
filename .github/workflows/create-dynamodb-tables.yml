@@ -25,8 +25,10 @@ jobs:
         run: |
           echo "Deploying for environment: $Environment"
           TABLES=("decoded_vin_${Environment}" "otolane_geopoint_distance_${Environment}" "transport_quote_${Environment}" "vin_req_count_${Environment}")
+          echo ${TABLES[@]}
           EXISTING_TABLES=$(aws dynamodb list-tables --query "TableNames" --output json)
-          ANY_TABLE_MISSING=false
+          echo ${EXISTING_TABLES[@]}
+          #ANY_TABLE_MISSING=false
 
           for TABLE in "${TABLES[@]}"; do
             if echo "$EXISTING_TABLES" | grep -q "$TABLE"; then
