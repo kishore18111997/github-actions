@@ -23,8 +23,8 @@ jobs:
       - name: Check Existing DynamoDB Tables
         id: check_tables
         run: |
-          echo "Deploying for environment: $ENVIRONMENT"
-          TABLES=("decoded_vin_${ENVIRONMENT}" "otolane_geopoint_distance_${ENVIRONMENT}" "transport_quote_${ENVIRONMENT}" "vin_req_count_${ENVIRONMENT}")
+          echo "Deploying for environment: $Environment"
+          TABLES=("decoded_vin_${Environment}" "otolane_geopoint_distance_${Environment}" "transport_quote_${Environment}" "vin_req_count_${Environment}")
           EXISTING_TABLES=$(aws dynamodb list-tables --query "TableNames" --output json)
 
           for TABLE in "${TABLES[@]}"; do
