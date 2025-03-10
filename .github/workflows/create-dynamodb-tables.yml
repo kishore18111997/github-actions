@@ -31,6 +31,9 @@ jobs:
             fi
           done
 
+      - name: check current path
+        run: pwd && ls
+      
       - name: Deploy CloudFormation Stack
         run: |
           aws cloudformation deploy \
