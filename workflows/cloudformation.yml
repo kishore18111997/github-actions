@@ -10,13 +10,6 @@ Parameters:
     Default: uat
     Description: The environment to deploy the DynamoDB tables for (prod or uat)
 
-Conditions:
-  CreateDecodedVinTable: !Equals [!Ref DecodedVinTableExists, "false"]
-  CreateGeoPointDistanceTable: !Equals [!Ref GeoPointDistanceTableExists, "false"]
-  CreateTransportQuoteTable: !Equals [!Ref TransportQuoteTableExists, "false"]
-  CreateVinReqCountTable: !Equals [!Ref VinReqCountTableExists, "false"]
-
-Parameters:
   DecodedVinTableExists:
     Type: String
     Default: "false"
@@ -29,6 +22,12 @@ Parameters:
   VinReqCountTableExists:
     Type: String
     Default: "false"
+
+Conditions:
+  CreateDecodedVinTable: !Equals [!Ref DecodedVinTableExists, "false"]
+  CreateGeoPointDistanceTable: !Equals [!Ref GeoPointDistanceTableExists, "false"]
+  CreateTransportQuoteTable: !Equals [!Ref TransportQuoteTableExists, "false"]
+  CreateVinReqCountTable: !Equals [!Ref VinReqCountTableExists, "false"]
 
 Resources:
   DecodedVinTable:
