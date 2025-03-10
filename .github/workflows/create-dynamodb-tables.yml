@@ -1,9 +1,7 @@
 name: Deploy DynamoDB Tables
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   check-and-deploy:
